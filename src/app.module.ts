@@ -2,6 +2,7 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { ChaptersModule } from './chapters/chapters.module'
 import { Chapter } from './chapters/entities/chapter.entity'
+import { OrderManagerModule } from './order-manager/order-manager.module'
 import { Replay } from './replays/entities/replay.entity'
 import { ReplaysModule } from './replays/replays.module'
 import { Sentence } from './sentences/entities/sentence.entity'
@@ -34,6 +35,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
     ReplaysModule,
     ChaptersModule,
     SentencesModule,
+    OrderManagerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

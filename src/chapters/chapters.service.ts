@@ -1,35 +1,31 @@
+import { OrderManagerService } from '../order-manager/order-manager.service'
+import { Story } from '../stories/entities/story.entity'
 import { CreateChapterDto } from './dto/create-chapter.dto'
 import { ReorderChapterDto } from './dto/reorder-chapter.dto'
 import { UpdateChapterDto } from './dto/update-chapter.dto'
 import { Chapter } from './entities/chapter.entity'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { DataSource, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 
 @Injectable()
 export class ChaptersService {
   constructor(
     @InjectRepository(Chapter) private repository: Repository<Chapter>,
-    private dataSource: DataSource
+    private orderManagerService: OrderManagerService
   ) {}
 
   async create(createChapterDto: CreateChapterDto) {
     const { storyId, ...rest } = createChapterDto
+    const story = new Story()
 
-    const insert = await this.repository
-      .createQueryBuilder()
-      .insert()
-      .into(Chapter)
-      .values({
-        ...rest,
-        story: { id: storyId },
-        ordinalNumber: () =>
-          `(SELECT count(c.id) + 1 from ${this.repository.metadata.tableName} c)`,
-      })
-      .returning('*')
-      .execute()
+    story.id = storyId
 
-    return insert.generatedMaps[0]
+    return this.orderManagerService.createWithOrdinalNumber(
+      { ...rest, story },
+      this.repository.createQueryBuilder(),
+      this.repository.metadata.tableName
+    )
   }
 
   async reorder(id: number, reorderChapterDto: ReorderChapterDto) {
@@ -38,25 +34,7 @@ export class ChaptersService {
       ordinalNumber: reorderChapterDto.newOrdinalNumber,
     })
 
-    targetChapter.ordinalNumber = currentChapter.ordinalNumber
-    currentChapter.ordinalNumber = reorderChapterDto.newOrdinalNumber
-
-    const queryRunner = this.dataSource.createQueryRunner()
-
-    await queryRunner.connect()
-    await queryRunner.startTransaction()
-
-    try {
-      await queryRunner.manager.save([currentChapter, targetChapter])
-
-      await queryRunner.commitTransaction()
-    } catch (error) {
-      await queryRunner.rollbackTransaction()
-    } finally {
-      await queryRunner.release()
-    }
-
-    return [currentChapter, targetChapter]
+    return this.orderManagerService.reorder(currentChapter, targetChapter)
   }
 
   findAll() {
