@@ -1,4 +1,4 @@
-import { Chapter } from './chapter.entity'
+import { Chapter } from '../../stories2/entities/chapter.entity'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
@@ -12,7 +12,7 @@ export class Story {
   @Column()
   title: string
 
-  @Column()
+  @Column({ default: '' })
   description: string
 
   @OneToMany(() => Chapter, (chapter) => chapter.story)

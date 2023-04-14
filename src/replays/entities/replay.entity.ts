@@ -1,4 +1,4 @@
-import { Sentence } from './sentence.entity'
+import { Sentence } from '../../stories2/entities/sentence.entity'
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()

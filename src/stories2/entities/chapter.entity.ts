@@ -1,5 +1,5 @@
+import { Story } from '../../stories/entities/story.entity'
 import { Sentence } from './sentence.entity'
-import { Story } from './story.entity'
 import {
   Column,
   Entity,

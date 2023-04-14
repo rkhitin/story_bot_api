@@ -1,13 +1,15 @@
+import { Replay } from '../../replays/entities/replay.entity'
 import { Chapter } from './chapter.entity'
-import { Replay } from './replay.entity'
 import {
   Column,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm'
 
+@Unique(['chapter', 'ordinalNumber'])
 @Entity()
 export class Sentence {
   @PrimaryGeneratedColumn()
