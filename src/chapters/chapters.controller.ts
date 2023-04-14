@@ -1,5 +1,6 @@
 import { ChaptersService } from './chapters.service'
 import { CreateChapterDto } from './dto/create-chapter.dto'
+import { ReorderChapterDto } from './dto/reorder-chapter.dto'
 import { UpdateChapterDto } from './dto/update-chapter.dto'
 import {
   Body,
@@ -33,6 +34,14 @@ export class ChaptersController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateChapterDto: UpdateChapterDto) {
     return this.chaptersService.update(+id, updateChapterDto)
+  }
+
+  @Patch(':id/reorder')
+  reorder(
+    @Param('id') id: string,
+    @Body() reorderChapterDto: ReorderChapterDto
+  ) {
+    return this.chaptersService.reorder(+id, reorderChapterDto)
   }
 
   @Delete(':id')

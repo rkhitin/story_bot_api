@@ -1,14 +1,16 @@
 import { CreateChapterDto } from './dto/create-chapter.dto'
+import { ReorderChapterDto } from './dto/reorder-chapter.dto'
 import { UpdateChapterDto } from './dto/update-chapter.dto'
 import { Chapter } from './entities/chapter.entity'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { DataSource, Repository } from 'typeorm'
 
 @Injectable()
 export class ChaptersService {
   constructor(
-    @InjectRepository(Chapter) private repository: Repository<Chapter>
+    @InjectRepository(Chapter) private repository: Repository<Chapter>,
+    private dataSource: DataSource
   ) {}
 
   async create(createChapterDto: CreateChapterDto) {
@@ -29,6 +31,34 @@ export class ChaptersService {
 
     return insert.generatedMaps[0]
   }
+
+  async reorder(id: number, reorderChapterDto: ReorderChapterDto) {
+    const currentChapter = await this.repository.findOneBy({ id })
+    const targetChapter = await this.repository.findOneBy({
+      ordinalNumber: reorderChapterDto.newOrdinalNumber,
+    })
+
+    targetChapter.ordinalNumber = currentChapter.ordinalNumber
+    currentChapter.ordinalNumber = reorderChapterDto.newOrdinalNumber
+
+    const queryRunner = this.dataSource.createQueryRunner()
+
+    await queryRunner.connect()
+    await queryRunner.startTransaction()
+
+    try {
+      await queryRunner.manager.save([currentChapter, targetChapter])
+
+      await queryRunner.commitTransaction()
+    } catch (error) {
+      await queryRunner.rollbackTransaction()
+    } finally {
+      await queryRunner.release()
+    }
+
+    return [currentChapter, targetChapter]
+  }
+
   findAll() {
     return this.repository.find()
   }
