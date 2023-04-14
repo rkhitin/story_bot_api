@@ -1,6 +1,6 @@
+import { Chapter } from './src/chapters/entities/chapter.entity'
 import { Replay } from './src/replays/entities/replay.entity'
-import { Chapter } from './src/stories2/entities/chapter.entity'
-import { Sentence } from './src/stories2/entities/sentence.entity'
+import { Sentence } from './src/sentences/entities/sentence.entity'
 import { Story } from './src/stories/entities/story.entity'
 import { config } from 'dotenv'
 import { DataSource } from 'typeorm'

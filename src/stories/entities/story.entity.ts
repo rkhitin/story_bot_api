@@ -1,4 +1,4 @@
-import { Chapter } from '../../stories2/entities/chapter.entity'
+import { Chapter } from '../../chapters/entities/chapter.entity'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()

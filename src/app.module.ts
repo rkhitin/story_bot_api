@@ -1,9 +1,11 @@
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { ChaptersModule } from './chapters/chapters.module'
+import { Chapter } from './chapters/entities/chapter.entity'
 import { Replay } from './replays/entities/replay.entity'
 import { ReplaysModule } from './replays/replays.module'
-import { Chapter } from './stories2/entities/chapter.entity'
-import { Sentence } from './stories2/entities/sentence.entity'
+import { Sentence } from './sentences/entities/sentence.entity'
+import { SentencesModule } from './sentences/sentences.module'
 import { Story } from './stories/entities/story.entity'
 import { StoriesModule } from './stories/stories.module'
 import { Module } from '@nestjs/common'
@@ -16,7 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
+        type: 'mariadb',
         host: configService.get('HOST'),
         port: +configService.get('PORT'),
         username: configService.get('DATABASE_USER'),
@@ -30,6 +32,8 @@ import { TypeOrmModule } from '@nestjs/typeorm'
     }),
     StoriesModule,
     ReplaysModule,
+    ChaptersModule,
+    SentencesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

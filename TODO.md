@@ -1,6 +1,5 @@
 # Should be done
 
-- CRUD for a story 
 - CRUD for a chapter
 - CRUD for a sentence
 - CRUD for a replay
@@ -12,3 +11,4 @@
 - Send messages to telegram bot
 
 # Have been done
+- CRUD for a story 

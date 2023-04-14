@@ -1,5 +1,5 @@
+import { Sentence } from '../../sentences/entities/sentence.entity'
 import { Story } from '../../stories/entities/story.entity'
-import { Sentence } from './sentence.entity'
 import {
   Column,
   Entity,
@@ -22,10 +22,13 @@ export class Chapter {
   @Column()
   title: string
 
-  @Column()
+  @Column({ default: '' })
   description: string
 
-  @ManyToOne(() => Story, (story) => story.chapters)
+  @ManyToOne(() => Story, (story) => story.chapters, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   story: Story
 
   @OneToMany(() => Sentence, (sentence) => sentence.chapter)

@@ -1,5 +1,5 @@
+import { Chapter } from '../../chapters/entities/chapter.entity'
 import { Replay } from '../../replays/entities/replay.entity'
-import { Chapter } from './chapter.entity'
 import {
   Column,
   Entity,

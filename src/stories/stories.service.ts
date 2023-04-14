@@ -21,8 +21,8 @@ export class StoriesService {
     return this.repository.findOneBy({ id })
   }
 
-  update(id: number, updateStoryDto: UpdateStoryDto) {
-    return `This action updates a #${id} story`
+  async update(id: number, updateStoryDto: UpdateStoryDto) {
+    return this.repository.save({ id, ...updateStoryDto })
   }
 
   remove(id: number) {
