@@ -15,6 +15,9 @@ export class Replay {
   @Column()
   hint: string
 
-  @ManyToOne(() => Sentence, (sentence) => sentence.replays)
+  @ManyToOne(() => Sentence, (sentence) => sentence.replays, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   sentence: Sentence
 }

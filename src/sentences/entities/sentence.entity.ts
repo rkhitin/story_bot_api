@@ -27,7 +27,10 @@ export class Sentence {
   @Column()
   delayBeforeSending: number
 
-  @ManyToOne(() => Chapter, (chapter) => chapter.sentences)
+  @ManyToOne(() => Chapter, (chapter) => chapter.sentences, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   chapter: Chapter
 
   @OneToMany(() => Replay, (replay) => replay.sentence)

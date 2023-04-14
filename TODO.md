@@ -1,12 +1,9 @@
 # Should be done
-
-- CRUD for a replay
-- Return stories
-- Return story with all data
 - Telegraf integration
 - Send messages to telegram bot
 
 # Have been done
+- CRUD for a replay
 - CRUD for a sentence
 - Reorder sentences in chapter
 - Reorder chapters in story

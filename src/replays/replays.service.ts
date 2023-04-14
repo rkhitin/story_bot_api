@@ -24,7 +24,7 @@ export class ReplaysService {
   }
 
   update(id: number, updateReplayDto: UpdateReplayDto) {
-    return `This action updates a #${id} replay`
+    return this.repository.save({ id, ...updateReplayDto })
   }
 
   remove(id: number) {
