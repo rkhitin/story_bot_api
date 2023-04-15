@@ -23,6 +23,7 @@ const options: SeederOptions & DataSourceOptions = {
     'db/seeds/chapter.seeder.ts',
     'db/seeds/sentence.seeder.ts',
     'db/seeds/replay.seeder.ts',
+    'db/seeds/user.seeder.ts',
   ],
   factories: ['db/factories/*.ts'],
 }
