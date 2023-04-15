@@ -10,6 +10,7 @@ import { Sentence } from './sentences/entities/sentence.entity'
 import { SentencesModule } from './sentences/sentences.module'
 import { Story } from './stories/entities/story.entity'
 import { StoriesModule } from './stories/stories.module'
+import { User } from './users/entities/user.entity'
 import { UsersModule } from './users/users.module'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
@@ -27,7 +28,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
         username: configService.get('DATABASE_USER'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [Replay, Sentence, Chapter, Story],
+        entities: [Replay, Sentence, Chapter, Story, User],
         synchronize: true,
       }),
 
