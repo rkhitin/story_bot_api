@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { CreateReplayDto } from './dto/create-replay.dto'
 import { UpdateReplayDto } from './dto/update-replay.dto'
 import { ReplaysService } from './replays.service'
@@ -9,8 +10,10 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common'
 
+@UseGuards(JwtAuthGuard)
 @Controller('replays')
 export class ReplaysController {
   constructor(private readonly replaysService: ReplaysService) {}

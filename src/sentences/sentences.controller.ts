@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { ReorderChapterDto } from '../chapters/dto/reorder-chapter.dto'
 import { CreateSentenceDto } from './dto/create-sentence.dto'
 import { UpdateSentenceDto } from './dto/update-sentence.dto'
@@ -10,8 +11,10 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common'
 
+@UseGuards(JwtAuthGuard)
 @Controller('sentences')
 export class SentencesController {
   constructor(private readonly sentencesService: SentencesService) {}

@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { CreateStoryDto } from './dto/create-story.dto'
 import { UpdateStoryDto } from './dto/update-story.dto'
 import { StoriesService } from './stories.service'
@@ -9,8 +10,10 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common'
 
+@UseGuards(JwtAuthGuard)
 @Controller('stories')
 export class StoriesController {
   constructor(private readonly storiesService: StoriesService) {}

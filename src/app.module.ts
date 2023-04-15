@@ -1,5 +1,6 @@
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { AuthModule } from './auth/auth.module'
 import { ChaptersModule } from './chapters/chapters.module'
 import { Chapter } from './chapters/entities/chapter.entity'
 import { OrderManagerModule } from './order-manager/order-manager.module'
@@ -9,6 +10,7 @@ import { Sentence } from './sentences/entities/sentence.entity'
 import { SentencesModule } from './sentences/sentences.module'
 import { Story } from './stories/entities/story.entity'
 import { StoriesModule } from './stories/stories.module'
+import { UsersModule } from './users/users.module'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -36,6 +38,8 @@ import { TypeOrmModule } from '@nestjs/typeorm'
     ChaptersModule,
     SentencesModule,
     OrderManagerModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

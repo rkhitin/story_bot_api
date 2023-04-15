@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { ChaptersService } from './chapters.service'
 import { CreateChapterDto } from './dto/create-chapter.dto'
 import { ReorderChapterDto } from './dto/reorder-chapter.dto'
@@ -10,8 +11,10 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common'
 
+@UseGuards(JwtAuthGuard)
 @Controller('chapters')
 export class ChaptersController {
   constructor(private readonly chaptersService: ChaptersService) {}
