@@ -1,5 +1,12 @@
+import { Answer } from '../../answers/entities/answer.entity'
 import { Sentence } from '../../sentences/entities/sentence.entity'
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 
 @Entity()
 export class Replay {
@@ -20,4 +27,7 @@ export class Replay {
     nullable: false,
   })
   sentence: Sentence
+
+  @OneToMany(() => Answer, (answer) => answer.replay)
+  answers: Answer[]
 }

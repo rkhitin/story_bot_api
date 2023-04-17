@@ -1,3 +1,5 @@
+import { AnswersModule } from './answers/answers.module'
+import { Answer } from './answers/entities/answer.entity'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
@@ -10,17 +12,22 @@ import { Sentence } from './sentences/entities/sentence.entity'
 import { SentencesModule } from './sentences/sentences.module'
 import { Story } from './stories/entities/story.entity'
 import { StoriesModule } from './stories/stories.module'
+import { TUser } from './t-users/entities/t-user.entity'
+import { TUsersModule } from './t-users/t-users.module'
+import { TelegramModule } from './telegram/telegram.module'
 import { User } from './users/entities/user.entity'
 import { UsersModule } from './users/users.module'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { TelegrafModule } from 'nestjs-telegraf'
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'mariadb',
         host: configService.get('HOST'),
@@ -28,11 +35,17 @@ import { TypeOrmModule } from '@nestjs/typeorm'
         username: configService.get('DATABASE_USER'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [Replay, Sentence, Chapter, Story, User],
+        entities: [Replay, Sentence, Chapter, Story, User, TUser, Answer],
         synchronize: true,
       }),
-
+    }),
+    TelegrafModule.forRootAsync({
+      imports: [ConfigModule],
       inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        token: configService.get('TELEGRAM_TOKEN'),
+        include: [TelegramModule],
+      }),
     }),
     StoriesModule,
     ReplaysModule,
@@ -41,6 +54,9 @@ import { TypeOrmModule } from '@nestjs/typeorm'
     OrderManagerModule,
     AuthModule,
     UsersModule,
+    TelegramModule,
+    TUsersModule,
+    AnswersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

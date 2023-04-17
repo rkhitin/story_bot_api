@@ -1,7 +1,9 @@
+import { Answer } from './src/answers/entities/answer.entity'
 import { Chapter } from './src/chapters/entities/chapter.entity'
 import { Replay } from './src/replays/entities/replay.entity'
 import { Sentence } from './src/sentences/entities/sentence.entity'
 import { Story } from './src/stories/entities/story.entity'
+import { TUser } from './src/t-users/entities/t-user.entity'
 import { User } from './src/users/entities/user.entity'
 import { config } from 'dotenv'
 import { DataSource, DataSourceOptions } from 'typeorm'
@@ -16,7 +18,7 @@ const options: SeederOptions & DataSourceOptions = {
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
-  entities: [Story, Chapter, Sentence, Replay, User],
+  entities: [Story, Chapter, Sentence, Replay, User, TUser, Answer],
   migrations: ['db/migrations/*.ts'],
   seeds: [
     'db/seeds/story.seeder.ts',
