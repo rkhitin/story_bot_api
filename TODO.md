@@ -1,13 +1,19 @@
 # Should be done
-- Start with preselected story
-- Send a sentences to the t-users after starting
-- Create a command block for replays
-- Create an answer after t-users replay
+- Choose the correct chapter
+- Send message with delay
+- Mark the correct or incorrect answer
+- Send the hint
+- Default error in case of wrong answer
+- Send the first message after start
 - Open answers
-- Setting for marking an correct answer in reply
 - Collect feedback from users
 
 # Have been done
+- Setting for marking an correct answer in reply
+- Create an answer after t-users replay
+- Create a command block for replays
+- Start with preselected story
+- Send a sentences to the t-users after starting
 - Register t-users after start action in the bot
 - Create t-users module
 - Create answers module
