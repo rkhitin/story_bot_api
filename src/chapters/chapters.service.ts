@@ -12,7 +12,7 @@ import { Repository } from 'typeorm'
 export class ChaptersService {
   constructor(
     @InjectRepository(Chapter) private repository: Repository<Chapter>,
-    private orderManagerService: OrderManagerService
+    private orderManagerService: OrderManagerService,
   ) {}
 
   async create(createChapterDto: CreateChapterDto) {
@@ -24,7 +24,7 @@ export class ChaptersService {
     return this.orderManagerService.createWithOrdinalNumber(
       { ...rest, story },
       this.repository.createQueryBuilder(),
-      this.repository.metadata.tableName
+      this.repository.metadata.tableName,
     )
   }
 

@@ -13,7 +13,7 @@ export class SentencesService {
   constructor(
     @InjectRepository(Sentence) private repository: Repository<Sentence>,
     private dataSource: DataSource,
-    private orderManagerService: OrderManagerService
+    private orderManagerService: OrderManagerService,
   ) {}
 
   async create(createSentenceDto: CreateSentenceDto) {
@@ -25,7 +25,7 @@ export class SentencesService {
     return this.orderManagerService.createWithOrdinalNumber(
       { ...rest, chapter },
       this.repository.createQueryBuilder(),
-      this.repository.metadata.tableName
+      this.repository.metadata.tableName,
     )
   }
 

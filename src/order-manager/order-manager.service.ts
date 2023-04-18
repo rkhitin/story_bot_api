@@ -9,7 +9,7 @@ export class OrderManagerService {
   async createWithOrdinalNumber<T>(
     entityData: Partial<T>,
     queryBuilder: SelectQueryBuilder<T>,
-    tableName: string
+    tableName: string,
   ) {
     const insert = await queryBuilder
       .insert()

@@ -10,7 +10,11 @@ import {
 } from 'typeorm'
 
 @Unique(['chapter', 'ordinalNumber'])
-@Entity()
+@Entity('sentence', {
+  orderBy: {
+    ordinalNumber: 'ASC',
+  },
+})
 export class Sentence {
   @PrimaryGeneratedColumn()
   id: number

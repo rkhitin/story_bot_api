@@ -7,11 +7,13 @@ import {
   Unique,
 } from 'typeorm'
 
+export type TUserId = number & { __type: 'TUserId' }
+
 @Unique(['telegramId', 'username'])
 @Entity()
 export class TUser {
   @PrimaryGeneratedColumn()
-  id: number
+  id: TUserId
 
   @Column()
   telegramId: number

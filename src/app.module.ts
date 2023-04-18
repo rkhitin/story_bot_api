@@ -37,6 +37,7 @@ import { TelegrafModule } from 'nestjs-telegraf'
         database: configService.get('DATABASE_NAME'),
         entities: [Replay, Sentence, Chapter, Story, User, TUser, Answer],
         synchronize: true,
+        logging: true,
       }),
     }),
     TelegrafModule.forRootAsync({

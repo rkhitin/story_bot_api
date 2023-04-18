@@ -7,7 +7,7 @@ import { Seeder, SeederFactoryManager } from 'typeorm-extension'
 export default class SentenceSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager
+    factoryManager: SeederFactoryManager,
   ): Promise<any> {
     const repository = dataSource.getRepository(Sentence)
     const chapterRepository = dataSource.getRepository(Chapter)
@@ -25,6 +25,7 @@ export default class SentenceSeeder implements Seeder {
       for (let i = 0; i < amount; i++) {
         const sentence = await factory.make({}, false)
 
+        sentence.text += i
         sentence.chapter = chapter
         sentence.ordinalNumber = i + 1
         sentence.isActive = Math.random() > 0.3

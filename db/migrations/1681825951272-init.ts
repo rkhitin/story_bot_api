@@ -1,14 +1,14 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Init1681721956374 implements MigrationInterface {
-    name = 'Init1681721956374'
+export class Init1681825951272 implements MigrationInterface {
+    name = 'Init1681825951272'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE \`story\` (\`id\` int NOT NULL AUTO_INCREMENT, \`isActive\` tinyint NOT NULL DEFAULT 1, \`title\` varchar(255) NOT NULL, \`description\` varchar(255) NOT NULL DEFAULT '', PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`chapter\` (\`id\` int NOT NULL AUTO_INCREMENT, \`ordinalNumber\` int NOT NULL, \`isActive\` tinyint NOT NULL DEFAULT 1, \`title\` varchar(255) NOT NULL, \`description\` varchar(255) NOT NULL DEFAULT '', \`storyId\` int NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`sentence\` (\`id\` int NOT NULL AUTO_INCREMENT, \`ordinalNumber\` int NOT NULL, \`isActive\` tinyint NOT NULL DEFAULT 1, \`text\` varchar(255) NOT NULL, \`delayBeforeSending\` int NOT NULL, \`chapterId\` int NOT NULL, UNIQUE INDEX \`IDX_49f493a64c8e2315ff4e5c9a09\` (\`chapterId\`, \`ordinalNumber\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`replay\` (\`id\` int NOT NULL AUTO_INCREMENT, \`isActive\` tinyint NOT NULL DEFAULT 1, \`text\` varchar(255) NOT NULL, \`hint\` varchar(255) NOT NULL, \`sentenceId\` int NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
-        await queryRunner.query(`CREATE TABLE \`t_user\` (\`id\` int NOT NULL AUTO_INCREMENT, \`telegramId\` varchar(255) NOT NULL, \`username\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
+        await queryRunner.query(`CREATE TABLE \`t_user\` (\`id\` int NOT NULL AUTO_INCREMENT, \`telegramId\` int NOT NULL, \`username\` varchar(255) NOT NULL, UNIQUE INDEX \`IDX_6f15a3fb289ac5d5ed4ab39147\` (\`telegramId\`, \`username\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`answer\` (\`id\` int NOT NULL AUTO_INCREMENT, \`tUserId\` int NOT NULL, \`replayId\` int NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`CREATE TABLE \`user\` (\`id\` int NOT NULL AUTO_INCREMENT, \`username\` varchar(255) NOT NULL, \`passwordHash\` varchar(255) NOT NULL, UNIQUE INDEX \`IDX_78a916df40e02a9deb1c4b75ed\` (\`username\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
         await queryRunner.query(`ALTER TABLE \`chapter\` ADD CONSTRAINT \`FK_032f36b55436efe49e6775b4898\` FOREIGN KEY (\`storyId\`) REFERENCES \`story\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`);
@@ -27,6 +27,7 @@ export class Init1681721956374 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX \`IDX_78a916df40e02a9deb1c4b75ed\` ON \`user\``);
         await queryRunner.query(`DROP TABLE \`user\``);
         await queryRunner.query(`DROP TABLE \`answer\``);
+        await queryRunner.query(`DROP INDEX \`IDX_6f15a3fb289ac5d5ed4ab39147\` ON \`t_user\``);
         await queryRunner.query(`DROP TABLE \`t_user\``);
         await queryRunner.query(`DROP TABLE \`replay\``);
         await queryRunner.query(`DROP INDEX \`IDX_49f493a64c8e2315ff4e5c9a09\` ON \`sentence\``);

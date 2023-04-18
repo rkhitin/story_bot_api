@@ -5,7 +5,7 @@ import { Seeder, SeederFactoryManager } from 'typeorm-extension'
 export default class StorySeeder implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager
+    factoryManager: SeederFactoryManager,
   ): Promise<any> {
     const repository = dataSource.getRepository(Story)
 

@@ -8,15 +8,11 @@ import { Repository } from 'typeorm'
 export class TUsersService {
   constructor(@InjectRepository(TUser) private repository: Repository<TUser>) {}
 
-  async create(createTUserDto: CreateTUserDto): Promise<TUser | null> {
-    try {
-      return await this.repository.save(createTUserDto)
-    } catch (error) {
-      if (error.code === 'ER_DUP_ENTRY') {
-        return null
-      }
+  async findByUsername(username: string): Promise<TUser | undefined> {
+    return this.repository.findOne({ where: { username } })
+  }
 
-      throw error
-    }
+  async create(createTUserDto: CreateTUserDto): Promise<TUser | null> {
+    return await this.repository.save(createTUserDto)
   }
 }
