@@ -7,7 +7,7 @@ import { Seeder, SeederFactoryManager } from 'typeorm-extension'
 export default class SentenceSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager
+    factoryManager: SeederFactoryManager,
   ): Promise<any> {
     const repository = dataSource.getRepository(Replay)
     const chapterRepository = dataSource.getRepository(Sentence)

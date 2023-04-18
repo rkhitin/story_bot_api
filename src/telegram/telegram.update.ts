@@ -1,5 +1,6 @@
 import { AnswersService } from '../answers/answers.service'
 import { StoriesService } from '../stories/stories.service'
+import { TUserId } from '../t-users/entities/t-user.entity'
 import { TUsersService } from '../t-users/t-users.service'
 import { Action, Ctx, Help, On, Start, Update } from 'nestjs-telegraf'
 import { Context, Markup } from 'telegraf'
@@ -23,6 +24,19 @@ export class TelegramUpdate {
   //   await ctx.reply('Send me a sticker')
   // }
 
+  private async sendNextSentence(ctx: Context, tUserId: TUserId) {
+    const currentStory = await this.storiesService.getSentences(tUserId)
+
+    // TODO: get current chapters the correct way, with handeling of empty sentences
+    const firstSentence = currentStory.chapters[0].sentences[0]
+
+    const keyboard = firstSentence.replays.map((replay) =>
+      Markup.button.callback(replay.text, `action ${replay.id}-${tUserId}`),
+    )
+
+    await ctx.reply(firstSentence.text, Markup.inlineKeyboard(keyboard))
+  }
+
   @On('message')
   async on(@Ctx() ctx: Context) {
     const { username, id: telegramId } = ctx.from
@@ -34,15 +48,7 @@ export class TelegramUpdate {
       tUser = await this.tUserService.create({ username, telegramId })
     }
 
-    const currentStory = await this.storiesService.getSentences(tUser.id)
-
-    const firstSentence = currentStory.chapters[0].sentences[0]
-
-    const keyboard = firstSentence.replays.map((replay) =>
-      Markup.button.callback(replay.text, `action ${replay.id}-${tUser.id}`),
-    )
-
-    await ctx.reply(firstSentence.text, Markup.inlineKeyboard(keyboard))
+    await this.sendNextSentence(ctx, tUser.id)
   }
 
   @Action(/action (.+)/)
@@ -66,6 +72,8 @@ export class TelegramUpdate {
     //     ],
     //   ],
     // })
-    await ctx.reply('Ok')
+    // TODO: modify the old one keyboard ^
+    await ctx.reply('Answer was recorded')
+    await this.sendNextSentence(ctx, tUserId as unknown as TUserId)
   }
 }
