@@ -1,6 +1,4 @@
 # Should be done
-- Refactoring for telegram module, service should be splitted
-- Refactoring for start and on message handlers
 - Cache for previous keyboard
 - Choose the correct chapter
 - Handle open replies
@@ -9,6 +7,8 @@
 - Collect feedback from users
 
 # Have been done
+- Refactoring for start and on message handlers
+- Refactoring for telegram module, service should be splitted
 - Send the hint
 - Handle repeated replies
 - Send the first message after start

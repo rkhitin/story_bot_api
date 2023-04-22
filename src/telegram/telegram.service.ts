@@ -1,83 +1,76 @@
-import { Reply, ReplyId } from '../replies/entities/reply.entity'
+import { AnswersService } from '../answers/answers.service'
 import { SentenceId } from '../sentences/entities/sentence.entity'
+import { SentencesService } from '../sentences/sentences.service'
+import { StoriesService } from '../stories/stories.service'
 import { TUserId } from '../t-users/entities/t-user.entity'
-import { InjectRedis } from '@liaoliaots/nestjs-redis'
+import { TUsersService } from '../t-users/t-users.service'
+import { convertToSentenceId } from '../utils/type-convertors'
+import { TelegramCache } from './telegram.cache'
+import { TelegramHelper } from './telegram.helper'
 import { Injectable } from '@nestjs/common'
-import Redis from 'ioredis'
-
-type ButtonData = `action ${number}-${TUserId}-${number}`
-
-type ButtonProps = { text: string; data: ButtonData }
-
-type KeyboardProps = ButtonProps[]
-
-type MakeButtonDataDto = {
-  replyId: number
-  tUserId: TUserId
-  sentenceId: number
-}
+import { Markup } from 'telegraf'
+import { InlineKeyboardMarkup } from 'telegraf/src/core/types/typegram'
 
 @Injectable()
 export class TelegramService {
-  constructor(@InjectRedis() private readonly redis: Redis) {}
+  constructor(
+    private readonly helper: TelegramHelper,
+    private readonly cache: TelegramCache,
+    private readonly tUserService: TUsersService,
+    private readonly storiesService: StoriesService,
+    private readonly sentencesService: SentencesService,
+    private readonly answersService: AnswersService,
+  ) {}
 
-  private makeButtonData({
-    replyId,
-    tUserId,
-    sentenceId,
-  }: MakeButtonDataDto): ButtonData {
-    return `action ${replyId}-${tUserId}-${sentenceId}`
-  }
+  public async getTUser(username: string, telegramId: number) {
+    let tUser = await this.tUserService.find(username, telegramId)
 
-  public makeKeyboardProps(
-    replies: Reply[],
-    tUserId: TUserId,
-    sentenceId: number,
-  ): KeyboardProps {
-    return replies.map((reply) => ({
-      text: reply.text + ` (${reply.isCorrect ? '+' : '-'})`,
-      data: this.makeButtonData({ replyId: reply.id, tUserId, sentenceId }),
-    }))
-  }
-
-  public makeModifiedKeyboardProps(
-    replies: Reply[],
-    tUserId: TUserId,
-    sentenceId: SentenceId,
-    userReplyId: ReplyId,
-  ): KeyboardProps {
-    return replies.map((reply) => {
-      let text = reply.text + ` (${reply.isCorrect ? '+' : '-'})`
-
-      if (userReplyId === reply.id) {
-        text = (reply.isCorrect ? ' ✅' : ' ❌') + text
-      }
-
-      return {
-        text,
-        data: this.makeButtonData({ replyId: reply.id, tUserId, sentenceId }),
-      }
-    })
-  }
-
-  public saveKeyboardProps(sentenceId: number, keyboardProps: KeyboardProps) {
-    this.redis.set(
-      `keyboard_props_${sentenceId}`,
-      JSON.stringify(keyboardProps),
-    )
-  }
-
-  public async getKeyboardProps(
-    sentenceId: number,
-  ): Promise<KeyboardProps | null> {
-    const keyboardPropsJSON = await this.redis.get(
-      `keyboard_props_${sentenceId}`,
-    )
-
-    try {
-      return JSON.parse(keyboardPropsJSON)
-    } catch (_error) {
-      return null
+    if (!tUser) {
+      tUser = await this.tUserService.create({ username, telegramId })
     }
+
+    return tUser
+  }
+
+  public async getNextSentenceData(
+    tUserId: TUserId,
+  ): Promise<[string, Markup.Markup<InlineKeyboardMarkup>]> {
+    const currentStory = await this.storiesService.getStoryForUser(tUserId)
+
+    // TODO: get current chapters the correct way, with handeling of empty sentences
+    const firstSentence = currentStory.chapters[0].sentences[0]
+
+    const keyboardProps = this.helper.makeKeyboardProps(
+      firstSentence.replies,
+      tUserId,
+      firstSentence.id,
+    )
+
+    // this.telegramService.saveKeyboardProps(firstSentence.id, keyboardProps)
+
+    const keyboard = keyboardProps.map(({ text, data }) =>
+      Markup.button.callback(text, data),
+    )
+
+    return [firstSentence.text, Markup.inlineKeyboard(keyboard)]
+  }
+
+  public async getPreviousSentence(sentenceId: SentenceId) {
+    return this.sentencesService.findOneWithReplies(
+      convertToSentenceId(sentenceId),
+    )
+  }
+
+  public async getModifiedKeyboard({ previousSentence, replyId, tUserId }) {
+    const keyboardProps = this.helper.makeModifiedKeyboardProps(
+      previousSentence.replies,
+      tUserId,
+      previousSentence.id,
+      replyId,
+    )
+
+    return keyboardProps.map(({ text, data }) =>
+      Markup.button.callback(text, data),
+    )
   }
 }
