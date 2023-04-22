@@ -7,9 +7,9 @@ import { TUsersService } from '../t-users/t-users.service'
 import { convertToSentenceId } from '../utils/type-convertors'
 import { TelegramCache } from './telegram.cache'
 import { TelegramHelper } from './telegram.helper'
+import { TelegramReplyProps } from './telegram.types'
 import { Injectable } from '@nestjs/common'
 import { Markup } from 'telegraf'
-import { InlineKeyboardMarkup } from 'telegraf/src/core/types/typegram'
 
 @Injectable()
 export class TelegramService {
@@ -35,13 +35,15 @@ export class TelegramService {
 
   public async getNextSentenceData(
     tUserId: TUserId,
-  ): Promise<[string, Markup.Markup<InlineKeyboardMarkup>]> {
+  ): Promise<TelegramReplyProps> {
     const currentStory = await this.storiesService.getStoryForUser(tUserId)
 
     const firstSentence = currentStory?.chapters?.[0]?.sentences?.[0]
 
     if (!firstSentence) {
-      return ['The story has ended!', Markup.inlineKeyboard([])]
+      return {
+        text: 'The story has ended!',
+      }
     }
 
     this.cache.saveSentence(firstSentence)
@@ -64,7 +66,11 @@ export class TelegramService {
       Markup.button.callback(text, data, hide),
     )
 
-    return [firstSentence.text, Markup.inlineKeyboard(keyboard)]
+    return {
+      text: firstSentence.text,
+      keyboard: Markup.inlineKeyboard(keyboard),
+      delay: firstSentence.delayBeforeSending,
+    }
   }
 
   public async getPreviousSentence(sentenceId: SentenceId) {
@@ -95,7 +101,7 @@ export class TelegramService {
   public async handleMessage(
     tUserId: TUserId,
     message: string,
-  ): Promise<[string, Markup.Markup<InlineKeyboardMarkup>]> {
+  ): Promise<TelegramReplyProps> {
     const openReply = await this.cache.getOpenReply(tUserId)
 
     if (openReply) {
@@ -115,7 +121,7 @@ export class TelegramService {
       // TODO: unify hint creation
       const currentHint = openReply.hint ?? 'Wrong answer'
 
-      return [`*${currentHint}*`.replace('.', '\\.'), null]
+      return { text: `*${currentHint}*`.replace('.', '\\.') }
     }
 
     return await this.getNextSentenceData(tUserId)

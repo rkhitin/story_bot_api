@@ -39,4 +39,16 @@ export class TelegramCache {
   public async deleteOpenReply(tUserId: TUserId) {
     await this.redis.del(`open_reply_${tUserId}`)
   }
+
+  public setUserWaitingForResponse(tUserId: TUserId) {
+    this.redis.set(`user_waiting_for_response_${tUserId}`, 1)
+  }
+
+  public async checkIsUserWaitingForResponse(tUserId: TUserId) {
+    return !!(await this.redis.get(`user_waiting_for_response_${tUserId}`))
+  }
+
+  public deleteUserWaitingForResponse(tUserId: TUserId) {
+    this.redis.del(`user_waiting_for_response_${tUserId}`)
+  }
 }

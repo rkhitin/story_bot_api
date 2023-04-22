@@ -1,9 +1,9 @@
 # Should be done
-- Send message with delay
 - Collect feedback from users
 - Refactoring for telegram module
 
 # Have been done
+- Send message with delay
 - Default error in case of wrong answer
 - Handle open replies
 - Cache for previous keyboard
