@@ -1,4 +1,5 @@
-import { KeyboardProps } from './telegram.types'
+import { Sentence } from '../sentences/entities/sentence.entity'
+import { SentenceId } from '../sentences/entities/sentence.entity'
 import { InjectRedis } from '@liaoliaots/nestjs-redis'
 import { Injectable } from '@nestjs/common'
 import Redis from 'ioredis'
@@ -7,24 +8,19 @@ import Redis from 'ioredis'
 export class TelegramCache {
   constructor(@InjectRedis() private readonly redis: Redis) {}
 
-  public saveKeyboardProps(sentenceId: number, keyboardProps: KeyboardProps) {
-    this.redis.set(
-      `keyboard_props_${sentenceId}`,
-      JSON.stringify(keyboardProps),
-    )
+  private getSentenceKey(sentenceId: SentenceId) {
+    return `sentence:${sentenceId}`
   }
 
-  public async getKeyboardProps(
-    sentenceId: number,
-  ): Promise<KeyboardProps | null> {
-    const keyboardPropsJSON = await this.redis.get(
-      `keyboard_props_${sentenceId}`,
+  public saveSentence(sentence: Sentence) {
+    this.redis.set(this.getSentenceKey(sentence.id), JSON.stringify(sentence))
+  }
+
+  public async getSentence(sentenceId: SentenceId) {
+    const sentenceFromCache = await this.redis.get(
+      this.getSentenceKey(sentenceId),
     )
 
-    try {
-      return JSON.parse(keyboardPropsJSON)
-    } catch (_error) {
-      return null
-    }
+    return sentenceFromCache ? JSON.parse(sentenceFromCache) : null
   }
 }

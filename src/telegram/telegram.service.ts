@@ -1,4 +1,3 @@
-import { AnswersService } from '../answers/answers.service'
 import { SentenceId } from '../sentences/entities/sentence.entity'
 import { SentencesService } from '../sentences/sentences.service'
 import { StoriesService } from '../stories/stories.service'
@@ -19,7 +18,6 @@ export class TelegramService {
     private readonly tUserService: TUsersService,
     private readonly storiesService: StoriesService,
     private readonly sentencesService: SentencesService,
-    private readonly answersService: AnswersService,
   ) {}
 
   public async getTUser(username: string, telegramId: number) {
@@ -43,13 +41,13 @@ export class TelegramService {
       return ['The story has ended!', Markup.inlineKeyboard([])]
     }
 
+    this.cache.saveSentence(firstSentence)
+
     const keyboardProps = this.helper.makeKeyboardProps(
       firstSentence.replies,
       tUserId,
       firstSentence.id,
     )
-
-    // this.telegramService.saveKeyboardProps(firstSentence.id, keyboardProps)
 
     const keyboard = keyboardProps.map(({ text, data }) =>
       Markup.button.callback(text, data),
@@ -59,6 +57,12 @@ export class TelegramService {
   }
 
   public async getPreviousSentence(sentenceId: SentenceId) {
+    const sentenceFromCache = await this.cache.getSentence(sentenceId)
+
+    if (sentenceFromCache) {
+      return sentenceFromCache
+    }
+
     return this.sentencesService.findOneWithReplies(
       convertToSentenceId(sentenceId),
     )
