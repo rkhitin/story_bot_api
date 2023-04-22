@@ -30,7 +30,7 @@ export class TelegramUpdate {
   }
 
   private async sendNextSentence(ctx: Context, tUserId: TUserId) {
-    const currentStory = await this.storiesService.getSentences(tUserId)
+    const currentStory = await this.storiesService.getStoryForUser(tUserId)
 
     // TODO: get current chapters the correct way, with handeling of empty sentences
     const firstSentence = currentStory.chapters[0].sentences[0]

@@ -31,7 +31,8 @@ export class ChaptersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.chaptersService.findOne(+id)
+    const chapterId = this.chaptersService.convertToChapterId(id)
+    return this.chaptersService.findOne(chapterId)
   }
 
   @Patch(':id')
@@ -42,13 +43,15 @@ export class ChaptersController {
   @Patch(':id/reorder')
   reorder(
     @Param('id') id: string,
-    @Body() reorderChapterDto: ReorderChapterDto
+    @Body() reorderChapterDto: ReorderChapterDto,
   ) {
-    return this.chaptersService.reorder(+id, reorderChapterDto)
+    const chapterId = this.chaptersService.convertToChapterId(id)
+    return this.chaptersService.reorder(chapterId, reorderChapterDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.chaptersService.remove(+id)
+    const chapterId = this.chaptersService.convertToChapterId(id)
+    return this.chaptersService.remove(chapterId)
   }
 }

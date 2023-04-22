@@ -8,10 +8,12 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
+export type ReplyId = number & { __type: 'ReplyId' }
+
 @Entity()
 export class Reply {
   @PrimaryGeneratedColumn()
-  id: number
+  id: ReplyId
 
   @Column({ default: true })
   isActive: boolean

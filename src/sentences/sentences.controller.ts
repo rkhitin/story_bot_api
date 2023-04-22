@@ -31,27 +31,31 @@ export class SentencesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.sentencesService.findOne(+id)
+    const sentenceId = this.sentencesService.convertToSentenceId(id)
+    return this.sentencesService.findOne(sentenceId)
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateSentenceDto: UpdateSentenceDto
+    @Body() updateSentenceDto: UpdateSentenceDto,
   ) {
-    return this.sentencesService.update(+id, updateSentenceDto)
+    const sentenceId = this.sentencesService.convertToSentenceId(id)
+    return this.sentencesService.update(sentenceId, updateSentenceDto)
   }
 
   @Patch(':id/reorder')
   reorder(
     @Param('id') id: string,
-    @Body() reorderChapterDto: ReorderChapterDto
+    @Body() reorderChapterDto: ReorderChapterDto,
   ) {
-    return this.sentencesService.reorder(+id, reorderChapterDto)
+    const sentenceId = this.sentencesService.convertToSentenceId(id)
+    return this.sentencesService.reorder(sentenceId, reorderChapterDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.sentencesService.remove(+id)
+    const sentenceId = this.sentencesService.convertToSentenceId(id)
+    return this.sentencesService.remove(sentenceId)
   }
 }

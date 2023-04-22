@@ -8,10 +8,12 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
+export type ChapterId = number & { __type: 'ChapterId' }
+
 @Entity()
 export class Chapter {
   @PrimaryGeneratedColumn()
-  id: number
+  id: ChapterId
 
   @Column()
   ordinalNumber: number

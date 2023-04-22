@@ -9,6 +9,8 @@ import {
   Unique,
 } from 'typeorm'
 
+export type SentenceId = number & { __type: 'SentenceId' }
+
 @Unique(['chapter', 'ordinalNumber'])
 @Entity('sentence', {
   orderBy: {
@@ -17,7 +19,7 @@ import {
 })
 export class Sentence {
   @PrimaryGeneratedColumn()
-  id: number
+  id: SentenceId
 
   @Column()
   ordinalNumber: number

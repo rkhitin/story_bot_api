@@ -1,7 +1,7 @@
 # Should be done
+- Modify previous keyboard after reply
 - Choose the correct chapter
 - Handle repeated replies
-- Make all ids branded
 - Send message with delay
 - Mark the correct or incorrect answer
 - Send the hint
@@ -11,6 +11,7 @@
 - Collect feedback from users
 
 # Have been done
+- Make all ids branded
 - Rename all replies
 - Setting for marking an correct answer in reply
 - Create an answer after t-users reply

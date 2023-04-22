@@ -1,6 +1,7 @@
+import { TUserId } from '../t-users/entities/t-user.entity'
 import { CreateStoryDto } from './dto/create-story.dto'
 import { UpdateStoryDto } from './dto/update-story.dto'
-import { Story } from './entities/story.entity'
+import { Story, StoryId } from './entities/story.entity'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -17,15 +18,15 @@ export class StoriesService {
     return this.repository.find()
   }
 
-  findOne(id: number) {
+  findOne(id: StoryId) {
     return this.repository.findOneBy({ id })
   }
 
-  async update(id: number, updateStoryDto: UpdateStoryDto) {
+  async update(id: StoryId, updateStoryDto: UpdateStoryDto) {
     return this.repository.save({ id, ...updateStoryDto })
   }
 
-  remove(id: number) {
+  remove(id: StoryId) {
     return this.repository.delete({ id })
   }
 
@@ -35,7 +36,7 @@ export class StoriesService {
    *
    * Also, maybe some kind of cashing is needed here?
    */
-  getSentences(tUserId: number) {
+  getStoryForUser(tUserId: TUserId) {
     return this.repository
       .createQueryBuilder('story')
       .leftJoinAndSelect('story.chapters', 'chapter')
@@ -58,5 +59,9 @@ export class StoriesService {
       .addOrderBy('chapter.ordinalNumber')
       .addOrderBy('sentence.ordinalNumber')
       .getOne()
+  }
+
+  convertToStoryId(id: number | string): StoryId {
+    return <StoryId>+id
   }
 }

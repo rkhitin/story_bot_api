@@ -30,16 +30,19 @@ export class StoriesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.storiesService.findOne(+id)
+    const storyId = this.storiesService.convertToStoryId(id)
+    return this.storiesService.findOne(storyId)
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStoryDto: UpdateStoryDto) {
-    return this.storiesService.update(+id, updateStoryDto)
+    const storyId = this.storiesService.convertToStoryId(id)
+    return this.storiesService.update(storyId, updateStoryDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.storiesService.remove(+id)
+    const storyId = this.storiesService.convertToStoryId(id)
+    return this.storiesService.remove(storyId)
   }
 }

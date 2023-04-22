@@ -3,7 +3,7 @@ import { Chapter } from '../chapters/entities/chapter.entity'
 import { OrderManagerService } from '../order-manager/order-manager.service'
 import { CreateSentenceDto } from './dto/create-sentence.dto'
 import { UpdateSentenceDto } from './dto/update-sentence.dto'
-import { Sentence } from './entities/sentence.entity'
+import { Sentence, SentenceId } from './entities/sentence.entity'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { DataSource, Repository } from 'typeorm'
@@ -29,7 +29,7 @@ export class SentencesService {
     )
   }
 
-  async reorder(id: number, reorderSentenceDto: ReorderChapterDto) {
+  async reorder(id: SentenceId, reorderSentenceDto: ReorderChapterDto) {
     const currentSentence = await this.repository.findOneBy({ id })
     const targetSentence = await this.repository.findOneBy({
       ordinalNumber: reorderSentenceDto.newOrdinalNumber,
@@ -42,15 +42,19 @@ export class SentencesService {
     return this.repository.find()
   }
 
-  findOne(id: number) {
+  findOne(id: SentenceId) {
     return this.repository.findOneBy({ id })
   }
 
-  update(id: number, updateSentenceDto: UpdateSentenceDto) {
+  update(id: SentenceId, updateSentenceDto: UpdateSentenceDto) {
     return this.repository.save({ id, ...updateSentenceDto })
   }
 
-  remove(id: number) {
+  remove(id: SentenceId) {
     return this.repository.delete({ id })
+  }
+
+  convertToSentenceId(id: number | string): SentenceId {
+    return <SentenceId>+id
   }
 }

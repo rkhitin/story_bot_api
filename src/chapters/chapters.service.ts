@@ -3,7 +3,7 @@ import { Story } from '../stories/entities/story.entity'
 import { CreateChapterDto } from './dto/create-chapter.dto'
 import { ReorderChapterDto } from './dto/reorder-chapter.dto'
 import { UpdateChapterDto } from './dto/update-chapter.dto'
-import { Chapter } from './entities/chapter.entity'
+import { Chapter, ChapterId } from './entities/chapter.entity'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -28,7 +28,7 @@ export class ChaptersService {
     )
   }
 
-  async reorder(id: number, reorderChapterDto: ReorderChapterDto) {
+  async reorder(id: ChapterId, reorderChapterDto: ReorderChapterDto) {
     const currentChapter = await this.repository.findOneBy({ id })
     const targetChapter = await this.repository.findOneBy({
       ordinalNumber: reorderChapterDto.newOrdinalNumber,
@@ -41,7 +41,7 @@ export class ChaptersService {
     return this.repository.find()
   }
 
-  findOne(id: number) {
+  findOne(id: ChapterId) {
     return this.repository.findOneBy({ id })
   }
 
@@ -49,7 +49,11 @@ export class ChaptersService {
     return this.repository.save({ id, ...updateChapterDto })
   }
 
-  remove(id: number) {
+  remove(id: ChapterId) {
     return this.repository.delete({ id })
+  }
+
+  convertToChapterId(id: number | string): ChapterId {
+    return <ChapterId>+id
   }
 }

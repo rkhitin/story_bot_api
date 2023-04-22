@@ -30,16 +30,19 @@ export class RepliesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.repliesService.findOne(+id)
+    const replyId = this.repliesService.convertToReplyId(id)
+    return this.repliesService.findOne(replyId)
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateReplyDto: UpdateReplyDto) {
-    return this.repliesService.update(+id, updateReplyDto)
+    const replyId = this.repliesService.convertToReplyId(id)
+    return this.repliesService.update(replyId, updateReplyDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.repliesService.remove(+id)
+    const replyId = this.repliesService.convertToReplyId(id)
+    return this.repliesService.remove(replyId)
   }
 }

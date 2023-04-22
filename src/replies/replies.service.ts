@@ -1,6 +1,6 @@
 import { CreateReplyDto } from './dto/create-reply.dto'
 import { UpdateReplyDto } from './dto/update-reply.dto'
-import { Reply } from './entities/reply.entity'
+import { Reply, ReplyId } from './entities/reply.entity'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -17,15 +17,19 @@ export class RepliesService {
     return this.repository.find()
   }
 
-  findOne(id: number) {
+  findOne(id: ReplyId) {
     return this.repository.findOneBy({ id })
   }
 
-  update(id: number, updateReplyDto: UpdateReplyDto) {
+  update(id: ReplyId, updateReplyDto: UpdateReplyDto) {
     return this.repository.save({ id, ...updateReplyDto })
   }
 
-  remove(id: number) {
+  remove(id: ReplyId) {
     return this.repository.delete({ id })
+  }
+
+  convertToReplyId(id: number | string): ReplyId {
+    return <ReplyId>+id
   }
 }

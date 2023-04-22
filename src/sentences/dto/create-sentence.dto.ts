@@ -1,3 +1,4 @@
+import { ChapterId } from '../../chapters/entities/chapter.entity'
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class CreateSentenceDto {
@@ -6,7 +7,7 @@ export class CreateSentenceDto {
 
   @IsNotEmpty()
   @IsNumber()
-  chapterId: number
+  chapterId: ChapterId
 
   @IsNotEmpty()
   @IsNumber()
