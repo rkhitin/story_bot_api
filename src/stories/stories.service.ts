@@ -32,6 +32,8 @@ export class StoriesService {
   /**
    * For now just return first active story.
    * In the future will give story in witch user is right now
+   *
+   * Also, maybe some kind of cashing is needed here?
    */
   getSentences(tUserId: number) {
     return this.repository

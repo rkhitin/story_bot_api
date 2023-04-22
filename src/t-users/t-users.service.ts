@@ -8,8 +8,8 @@ import { Repository } from 'typeorm'
 export class TUsersService {
   constructor(@InjectRepository(TUser) private repository: Repository<TUser>) {}
 
-  async findByUsername(username: string): Promise<TUser | undefined> {
-    return this.repository.findOne({ where: { username } })
+  async find(username: string, telegramId: number): Promise<TUser | undefined> {
+    return this.repository.findOne({ where: { username, telegramId } })
   }
 
   async create(createTUserDto: CreateTUserDto): Promise<TUser | null> {

@@ -17,6 +17,7 @@ import { TUsersModule } from './t-users/t-users.module'
 import { TelegramModule } from './telegram/telegram.module'
 import { User } from './users/entities/user.entity'
 import { UsersModule } from './users/users.module'
+import { RedisModule } from '@liaoliaots/nestjs-redis'
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -37,7 +38,7 @@ import { TelegrafModule } from 'nestjs-telegraf'
         database: configService.get('DATABASE_NAME'),
         entities: [Replay, Sentence, Chapter, Story, User, TUser, Answer],
         synchronize: true,
-        logging: true,
+        logging: false,
       }),
     }),
     TelegrafModule.forRootAsync({
@@ -46,6 +47,16 @@ import { TelegrafModule } from 'nestjs-telegraf'
       useFactory: (configService: ConfigService) => ({
         token: configService.get('TELEGRAM_TOKEN'),
         include: [TelegramModule],
+      }),
+    }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        config: {
+          host: configService.get('REDIS_HOST'),
+          port: configService.get('REDIS_PORT'),
+        },
       }),
     }),
     StoriesModule,
