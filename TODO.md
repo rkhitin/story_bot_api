@@ -1,10 +1,11 @@
 # Should be done
-- Handle open replies
 - Send message with delay
-- Default error in case of wrong answer
 - Collect feedback from users
+- Refactoring for telegram module
 
 # Have been done
+- Default error in case of wrong answer
+- Handle open replies
 - Cache for previous keyboard
 - Choose the correct chapter
 - Refactoring for start and on message handlers

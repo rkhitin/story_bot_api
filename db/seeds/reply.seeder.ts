@@ -26,6 +26,15 @@ export default class SentenceSeeder implements Seeder {
         const reply = await factory.make({}, false)
 
         reply.sentence = sentence
+
+        if (reply.type === 'open') {
+          reply.isActive = true
+          reply.isCorrect = true
+
+          replies.push(reply)
+          break
+        }
+
         reply.isActive = i === 0 || Math.random() > 0.3
         reply.isCorrect = i === 0
 

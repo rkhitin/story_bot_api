@@ -2,7 +2,7 @@ import { TUserId } from '../t-users/entities/t-user.entity'
 
 export type ButtonData = `action ${number}-${TUserId}-${number}`
 
-export type ButtonProps = { text: string; data: ButtonData }
+export type ButtonProps = { text: string; data: ButtonData; hide: boolean }
 
 export type KeyboardProps = ButtonProps[]
 

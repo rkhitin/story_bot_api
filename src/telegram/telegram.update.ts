@@ -22,12 +22,8 @@ export class TelegramUpdate {
 
     const tUser = await this.telegramService.getTUser(username, telegramId)
 
-    await this.sendNextSentence(ctx, tUser.id)
-  }
-
-  private async sendNextSentence(ctx: Context, tUserId: TUserId) {
     const [text, keyboard] = await this.telegramService.getNextSentenceData(
-      tUserId,
+      tUser.id,
     )
 
     await ctx.reply(text, keyboard)
@@ -35,12 +31,17 @@ export class TelegramUpdate {
 
   // TODO: handle the open reply here
   @On('message')
-  async on(@Ctx() ctx: Context) {
+  async on(@Ctx() ctx: Context & { message: { text: string } }) {
     const { username, id: telegramId } = ctx.from
 
     const tUser = await this.telegramService.getTUser(username, telegramId)
 
-    await this.sendNextSentence(ctx, tUser.id)
+    const [text, keyboard] = await this.telegramService.handleMessage(
+      tUser.id,
+      ctx.message.text,
+    )
+
+    await ctx.reply(text, keyboard)
   }
 
   // TODO: clear in this method later
@@ -83,12 +84,18 @@ export class TelegramUpdate {
 
     if (currentReply?.isCorrect) {
       await ctx.reply('Correct answer!')
-      await this.sendNextSentence(ctx, tUserId)
+
+      const [text, keyboard] = await this.telegramService.getNextSentenceData(
+        tUserId,
+      )
+
+      await ctx.reply(text, keyboard)
 
       return
     }
 
     if (currentReply) {
+      // TODO: unify hint creation
       const currentHint = currentReply.hint ?? 'Wrong answer'
 
       await ctx.replyWithMarkdownV2(`*${currentHint}*`.replace('.', '\\.'))

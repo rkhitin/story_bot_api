@@ -1,5 +1,7 @@
+import { Reply } from '../replies/entities/reply.entity'
 import { Sentence } from '../sentences/entities/sentence.entity'
 import { SentenceId } from '../sentences/entities/sentence.entity'
+import { TUserId } from '../t-users/entities/t-user.entity'
 import { InjectRedis } from '@liaoliaots/nestjs-redis'
 import { Injectable } from '@nestjs/common'
 import Redis from 'ioredis'
@@ -22,5 +24,19 @@ export class TelegramCache {
     )
 
     return sentenceFromCache ? JSON.parse(sentenceFromCache) : null
+  }
+
+  public saveOpenReply(reply: Reply, tUserId: TUserId) {
+    this.redis.set(`open_reply_${tUserId}`, JSON.stringify(reply))
+  }
+
+  public async getOpenReply(tUserId: TUserId) {
+    const replyFromCache = await this.redis.get(`open_reply_${tUserId}`)
+
+    return replyFromCache ? JSON.parse(replyFromCache) : null
+  }
+
+  public async deleteOpenReply(tUserId: TUserId) {
+    await this.redis.del(`open_reply_${tUserId}`)
   }
 }

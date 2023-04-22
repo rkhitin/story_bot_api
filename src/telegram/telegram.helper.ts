@@ -22,6 +22,7 @@ export class TelegramHelper {
     return replies.map((reply) => ({
       text: reply.text + ` (${reply.isCorrect ? '+' : '-'})`,
       data: this.makeButtonData({ replyId: reply.id, tUserId, sentenceId }),
+      hide: reply.type === 'open',
     }))
   }
 
@@ -41,6 +42,7 @@ export class TelegramHelper {
       return {
         text,
         data: this.makeButtonData({ replyId: reply.id, tUserId, sentenceId }),
+        hide: reply.type === 'open',
       }
     })
   }
