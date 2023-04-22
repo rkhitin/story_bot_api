@@ -5,12 +5,11 @@
 - Choose the correct chapter
 - Handle open replies
 - Send message with delay
-- Send the hint
 - Default error in case of wrong answer
-- Open answers
 - Collect feedback from users
 
 # Have been done
+- Send the hint
 - Handle repeated replies
 - Send the first message after start
 - Mark the correct or incorrect answer

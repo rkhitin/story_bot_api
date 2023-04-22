@@ -1,5 +1,4 @@
 import { AnswersService } from '../answers/answers.service'
-import { ReplyId } from '../replies/entities/reply.entity'
 import { SentencesService } from '../sentences/sentences.service'
 import { StoriesService } from '../stories/stories.service'
 import { TUserId } from '../t-users/entities/t-user.entity'
@@ -76,15 +75,18 @@ export class TelegramUpdate {
   @Action(/action (.+)/)
   async action(@Ctx() ctx: Context & { match: string[] }) {
     const actionData = ctx.match[1]
-    const [replyId, tUserId, sentenceId] = actionData.split('-')
+    const [rawReplyId, rawTUserId, sentenceId] = actionData.split('-')
+
+    const replyId = convertToReplyId(rawReplyId)
+    const tUserId = convertToTUserId(rawTUserId)
 
     const previousSentence = await this.sentencesService.findOneWithReplies(
       convertToSentenceId(sentenceId),
     )
 
     const answer = await this.answersService.create({
-      replyId: Number(replyId),
-      tUserId: Number(tUserId),
+      replyId,
+      tUserId,
     })
 
     // Check if user already answered this sentence successfully
@@ -94,14 +96,14 @@ export class TelegramUpdate {
     }
 
     const currentReply = previousSentence.replies.find(
-      (reply) => reply.id === Number(replyId),
+      (reply) => reply.id === replyId,
     )
 
     const keyboardProps = this.telegramService.makeModifiedKeyboardProps(
       previousSentence.replies,
-      convertToTUserId(tUserId),
+      tUserId,
       previousSentence.id,
-      convertToReplyId(replyId),
+      replyId,
     )
 
     await ctx.editMessageReplyMarkup({
@@ -114,7 +116,7 @@ export class TelegramUpdate {
 
     if (currentReply?.isCorrect) {
       await ctx.reply('Correct answer!')
-      await this.sendNextSentence(ctx, tUserId as unknown as TUserId)
+      await this.sendNextSentence(ctx, tUserId)
 
       return
     }
