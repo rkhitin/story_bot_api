@@ -20,7 +20,6 @@ const options: SeederOptions & DataSourceOptions = {
   database: process.env.DATABASE_NAME,
   entities: [Story, Chapter, Sentence, Reply, User, TUser, Answer],
   migrations: ['db/migrations/*.ts'],
-  logging: true,
   seeds: [
     'db/seeds/story.seeder.ts',
     'db/seeds/chapter.seeder.ts',

@@ -2,6 +2,7 @@
 - Modify previous keyboard after reply
 - Choose the correct chapter
 - Handle repeated replies
+- Handle open replies
 - Send message with delay
 - Mark the correct or incorrect answer
 - Send the hint
@@ -11,6 +12,8 @@
 - Collect feedback from users
 
 # Have been done
+- Add open reply
+- Mark correct reply
 - Make all ids branded
 - Rename all replies
 - Setting for marking an correct answer in reply

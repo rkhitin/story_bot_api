@@ -13,9 +13,12 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "rf": "ts-node ./scripts/refresh.ts",
     "m:g": "typeorm-ts-node-esm -d ./typeorm.config.ts migration:generate",
     "m:r": "typeorm-ts-node-esm -d ./typeorm.config.ts migration:run",
-    "seed": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js -d ./typeorm.config.ts seed"
+    "seed": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js -d ./typeorm.config.ts seed",
+    "db:drop": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js -d ./typeorm.config.ts db:drop",
+    "db:create": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js -d ./typeorm.config.ts db:create"
   },
   "dependencies": {
     "@liaoliaots/nestjs-redis": "^9.0.5",

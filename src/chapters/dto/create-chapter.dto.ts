@@ -1,3 +1,4 @@
+import { StoryId } from '../../stories/entities/story.entity'
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class CreateChapterDto {
@@ -6,7 +7,7 @@ export class CreateChapterDto {
 
   @IsNotEmpty()
   @IsNumber()
-  storyId: number
+  storyId: StoryId
 
   description?: string
 }

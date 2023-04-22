@@ -10,6 +10,9 @@ import {
 
 export type ReplyId = number & { __type: 'ReplyId' }
 
+const REPLY_TYPES = ['open', 'closed'] as const
+export type ReplyType = (typeof REPLY_TYPES)[number]
+
 @Entity()
 export class Reply {
   @PrimaryGeneratedColumn()
@@ -23,6 +26,17 @@ export class Reply {
 
   @Column()
   hint: string
+
+  @Column({
+    type: 'enum',
+    enum: REPLY_TYPES,
+    default: 'closed',
+    enumName: 'typeEnum',
+  })
+  type: ReplyType
+
+  @Column({ default: false })
+  isCorrect: boolean
 
   @ManyToOne(() => Sentence, (sentence) => sentence.replies, {
     onDelete: 'CASCADE',

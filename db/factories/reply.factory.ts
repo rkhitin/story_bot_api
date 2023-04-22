@@ -6,6 +6,7 @@ export default setSeederFactory(Reply, (faker) => {
 
   item.text = faker.lorem.sentence(2)
   item.hint = faker.lorem.sentence(6)
+  item.type = 'closed'
 
   return item
 })
