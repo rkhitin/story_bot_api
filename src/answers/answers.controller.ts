@@ -1,3 +1,4 @@
+import { convertToAnswerId } from '../utils/type-convertors'
 import { AnswersService } from './answers.service'
 import { Controller, Get, Param } from '@nestjs/common'
 
@@ -12,6 +13,6 @@ export class AnswersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.answersService.findOne(+id)
+    return this.answersService.findOne(convertToAnswerId(id))
   }
 }

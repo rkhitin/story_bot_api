@@ -1,3 +1,4 @@
+import { AnswerId } from '../answers/entities/answer.entity'
 import { ChapterId } from '../chapters/entities/chapter.entity'
 import { ReplyId } from '../replies/entities/reply.entity'
 import { SentenceId } from '../sentences/entities/sentence.entity'
@@ -13,3 +14,4 @@ export const convertToStoryId = typeConvertor<StoryId>
 export const convertToReplyId = typeConvertor<ReplyId>
 export const convertToChapterId = typeConvertor<ChapterId>
 export const convertToTUserId = typeConvertor<TUserId>
+export const convertToAnswerId = typeConvertor<AnswerId>

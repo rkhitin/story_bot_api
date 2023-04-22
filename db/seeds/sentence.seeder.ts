@@ -20,7 +20,7 @@ export default class SentenceSeeder implements Seeder {
     const sentences: Sentence[] = []
 
     for (const chapter of chapters) {
-      const amount = faker.datatype.number({ min: 5, max: 30 })
+      const amount = faker.datatype.number({ min: 5, max: 8 })
 
       for (let i = 0; i < amount; i++) {
         const sentence = await factory.make({}, false)

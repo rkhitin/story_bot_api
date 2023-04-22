@@ -1,12 +1,12 @@
 # Should be done
 - Cache for previous keyboard
-- Choose the correct chapter
 - Handle open replies
 - Send message with delay
 - Default error in case of wrong answer
 - Collect feedback from users
 
 # Have been done
+- Choose the correct chapter
 - Refactoring for start and on message handlers
 - Refactoring for telegram module, service should be splitted
 - Send the hint

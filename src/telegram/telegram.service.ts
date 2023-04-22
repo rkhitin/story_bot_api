@@ -37,8 +37,11 @@ export class TelegramService {
   ): Promise<[string, Markup.Markup<InlineKeyboardMarkup>]> {
     const currentStory = await this.storiesService.getStoryForUser(tUserId)
 
-    // TODO: get current chapters the correct way, with handeling of empty sentences
-    const firstSentence = currentStory.chapters[0].sentences[0]
+    const firstSentence = currentStory?.chapters?.[0]?.sentences?.[0]
+
+    if (!firstSentence) {
+      return ['The story has ended!', Markup.inlineKeyboard([])]
+    }
 
     const keyboardProps = this.helper.makeKeyboardProps(
       firstSentence.replies,
