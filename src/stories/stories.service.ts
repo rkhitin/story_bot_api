@@ -58,6 +58,7 @@ export class StoriesService {
       .orderBy('story.id')
       .addOrderBy('chapter.ordinalNumber')
       .addOrderBy('sentence.ordinalNumber')
+      .addOrderBy('reply.id')
       .getOne()
   }
 

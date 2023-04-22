@@ -42,8 +42,17 @@ export class SentencesService {
     return this.repository.find()
   }
 
+  findOneWithReplies(id: SentenceId) {
+    return this.repository
+      .createQueryBuilder('sentence')
+      .leftJoinAndSelect('sentence.replies', 'reply', 'reply.isActive = true')
+      .where('sentence.id = :id', { id })
+      .orderBy('reply.id')
+      .getOne()
+  }
+
   findOne(id: SentenceId) {
-    return this.repository.findOneBy({ id })
+    return this.repository.findOne({ where: { id } })
   }
 
   update(id: SentenceId, updateSentenceDto: UpdateSentenceDto) {

@@ -1,4 +1,4 @@
-import { Reply } from '../replies/entities/reply.entity'
+import { Reply, ReplyId } from '../replies/entities/reply.entity'
 import { TUserId } from '../t-users/entities/t-user.entity'
 import { InjectRedis } from '@liaoliaots/nestjs-redis'
 import { Injectable } from '@nestjs/common'
@@ -34,9 +34,29 @@ export class TelegramService {
     sentenceId: number,
   ): KeyboardProps {
     return replies.map((reply) => ({
-      text: reply.text,
+      text: reply.text + ` (${reply.isCorrect ? '+' : '-'})`,
       data: this.makeButtonData({ replyId: reply.id, tUserId, sentenceId }),
     }))
+  }
+
+  public makeModifiedKeyboardProps(
+    replies: Reply[],
+    tUserId: TUserId,
+    sentenceId: number,
+    userReplyId: ReplyId,
+  ): KeyboardProps {
+    return replies.map((reply) => {
+      let text = reply.text + ` (${reply.isCorrect ? '+' : '-'})`
+
+      if (String(userReplyId) === String(reply.id)) {
+        text = (reply.isCorrect ? ' ✅' : ' ❌') + text
+      }
+
+      return {
+        text,
+        data: this.makeButtonData({ replyId: reply.id, tUserId, sentenceId }),
+      }
+    })
   }
 
   public saveKeyboardProps(sentenceId: number, keyboardProps: KeyboardProps) {

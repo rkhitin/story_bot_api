@@ -10,11 +10,19 @@ export class AnswersService {
     @InjectRepository(Answer) private repository: Repository<Answer>,
   ) {}
 
-  create(createAnswerDto: CreateAnswerDto) {
-    return this.repository.save({
-      tUser: { id: createAnswerDto.tUserId },
-      reply: { id: createAnswerDto.replyId },
-    })
+  async create(createAnswerDto: CreateAnswerDto) {
+    try {
+      return await this.repository.save({
+        tUser: { id: createAnswerDto.tUserId },
+        reply: { id: createAnswerDto.replyId },
+      })
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        return null
+      }
+
+      throw error
+    }
   }
 
   findAll() {

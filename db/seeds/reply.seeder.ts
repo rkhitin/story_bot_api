@@ -27,7 +27,7 @@ export default class SentenceSeeder implements Seeder {
 
         reply.sentence = sentence
         reply.isActive = Math.random() > 0.3
-        reply.isCorrect = Math.random() > 0.7
+        reply.isCorrect = i === 0
 
         replies.push(reply)
       }

@@ -1,4 +1,6 @@
 import { AnswersService } from '../answers/answers.service'
+import { ReplyId } from '../replies/entities/reply.entity'
+import { SentencesService } from '../sentences/sentences.service'
 import { StoriesService } from '../stories/stories.service'
 import { TUserId } from '../t-users/entities/t-user.entity'
 import { TUsersService } from '../t-users/t-users.service'
@@ -13,6 +15,7 @@ export class TelegramUpdate {
     private storiesService: StoriesService,
     private answersService: AnswersService,
     private telegramService: TelegramService,
+    private sentencesService: SentencesService,
   ) {}
 
   @Start()
@@ -70,27 +73,32 @@ export class TelegramUpdate {
     const actionData = ctx.match[1]
     const [replyId, tUserId, sentenceId] = actionData.split('-')
 
-    // const previousKeyboardProps = await this.telegramService.getKeyboardProps(
-    //   Number(sentenceId),
-    // )
+    const previousSentence = await this.sentencesService.findOneWithReplies(
+      this.sentencesService.convertToSentenceId(sentenceId),
+    )
 
-    // console.log(previousKeyboardProps)
+    const answer = await this.answersService.create({
+      replyId: Number(replyId),
+      tUserId: Number(tUserId),
+    })
 
-    // const answer = await this.answersService.create({
-    //   replyId: Number(replyId),
-    //   tUserId: Number(tUserId),
-    // })
+    if (!answer) {
+      await ctx.reply('You already answered this question')
+      return
+    }
 
-    // console.log(actionData)
+    const keyboardProps = this.telegramService.makeModifiedKeyboardProps(
+      previousSentence.replies,
+      tUserId as unknown as TUserId,
+      previousSentence.id,
+      replyId as unknown as ReplyId,
+    )
 
-    // await ctx.answerCbQuery('OK')
     await ctx.editMessageReplyMarkup({
       inline_keyboard: [
-        // previousKeyboardProps.map(({text, data}) => Markup.button.)
-        //   [
-        //     Markup.button.callback('Wrong Answer', 'send 23'),
-        //     Markup.button.callback('Correct Answer ✅', 'send 23'),
-        //   ],
+        keyboardProps.map(({ text, data }) =>
+          Markup.button.callback(text, data),
+        ),
       ],
     })
 

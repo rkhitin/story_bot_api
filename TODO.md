@@ -1,17 +1,20 @@
 # Should be done
-- Modify previous keyboard after reply
+- Refactoring for telegram module, service should be splitted
+- Refactoring for start and on message handlers
+- Cache for previous keyboard
 - Choose the correct chapter
-- Handle repeated replies
 - Handle open replies
 - Send message with delay
-- Mark the correct or incorrect answer
 - Send the hint
 - Default error in case of wrong answer
-- Send the first message after start
 - Open answers
 - Collect feedback from users
 
 # Have been done
+- Handle repeated replies
+- Send the first message after start
+- Mark the correct or incorrect answer
+- Modify previous keyboard after reply
 - Add open reply
 - Mark correct reply
 - Make all ids branded
