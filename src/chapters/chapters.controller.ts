@@ -1,4 +1,5 @@
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { convertToChapterId } from '../utils/type-convertors'
 import { ChaptersService } from './chapters.service'
 import { CreateChapterDto } from './dto/create-chapter.dto'
 import { ReorderChapterDto } from './dto/reorder-chapter.dto'
@@ -31,13 +32,13 @@ export class ChaptersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    const chapterId = this.chaptersService.convertToChapterId(id)
+    const chapterId = convertToChapterId(id)
     return this.chaptersService.findOne(chapterId)
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateChapterDto: UpdateChapterDto) {
-    return this.chaptersService.update(+id, updateChapterDto)
+    return this.chaptersService.update(convertToChapterId(id), updateChapterDto)
   }
 
   @Patch(':id/reorder')
@@ -45,13 +46,13 @@ export class ChaptersController {
     @Param('id') id: string,
     @Body() reorderChapterDto: ReorderChapterDto,
   ) {
-    const chapterId = this.chaptersService.convertToChapterId(id)
+    const chapterId = convertToChapterId(id)
     return this.chaptersService.reorder(chapterId, reorderChapterDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    const chapterId = this.chaptersService.convertToChapterId(id)
+    const chapterId = convertToChapterId(id)
     return this.chaptersService.remove(chapterId)
   }
 }

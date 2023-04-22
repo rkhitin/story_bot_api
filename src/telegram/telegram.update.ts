@@ -4,6 +4,11 @@ import { SentencesService } from '../sentences/sentences.service'
 import { StoriesService } from '../stories/stories.service'
 import { TUserId } from '../t-users/entities/t-user.entity'
 import { TUsersService } from '../t-users/t-users.service'
+import {
+  convertToReplyId,
+  convertToSentenceId,
+  convertToTUserId,
+} from '../utils/type-convertors'
 import { TelegramService } from './telegram.service'
 import { Action, Ctx, On, Start, Update } from 'nestjs-telegraf'
 import { Context, Markup } from 'telegraf'
@@ -74,7 +79,7 @@ export class TelegramUpdate {
     const [replyId, tUserId, sentenceId] = actionData.split('-')
 
     const previousSentence = await this.sentencesService.findOneWithReplies(
-      this.sentencesService.convertToSentenceId(sentenceId),
+      convertToSentenceId(sentenceId),
     )
 
     const answer = await this.answersService.create({
@@ -82,16 +87,21 @@ export class TelegramUpdate {
       tUserId: Number(tUserId),
     })
 
+    // Check if user already answered this sentence successfully
     if (!answer) {
-      await ctx.reply('You already answered this question')
+      await ctx.reply('You already tried this answer, choose another one')
       return
     }
 
+    const currentReply = previousSentence.replies.find(
+      (reply) => reply.id === Number(replyId),
+    )
+
     const keyboardProps = this.telegramService.makeModifiedKeyboardProps(
       previousSentence.replies,
-      tUserId as unknown as TUserId,
+      convertToTUserId(tUserId),
       previousSentence.id,
-      replyId as unknown as ReplyId,
+      convertToReplyId(replyId),
     )
 
     await ctx.editMessageReplyMarkup({
@@ -102,8 +112,18 @@ export class TelegramUpdate {
       ],
     })
 
-    // TODO: modify the old one keyboard ^
-    await ctx.reply('Answer was recorded')
-    await this.sendNextSentence(ctx, tUserId as unknown as TUserId)
+    if (currentReply?.isCorrect) {
+      await ctx.reply('Correct answer!')
+      await this.sendNextSentence(ctx, tUserId as unknown as TUserId)
+
+      return
+    }
+
+    if (currentReply) {
+      const currentHint = currentReply.hint ?? 'Wrong answer'
+
+      await ctx.replyWithMarkdownV2(`*${currentHint}*`.replace('.', '\\.'))
+      await ctx.reply('Try again')
+    }
   }
 }

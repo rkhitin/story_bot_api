@@ -45,15 +45,11 @@ export class ChaptersService {
     return this.repository.findOneBy({ id })
   }
 
-  update(id: number, updateChapterDto: UpdateChapterDto) {
+  update(id: ChapterId, updateChapterDto: UpdateChapterDto) {
     return this.repository.save({ id, ...updateChapterDto })
   }
 
   remove(id: ChapterId) {
     return this.repository.delete({ id })
-  }
-
-  convertToChapterId(id: number | string): ChapterId {
-    return <ChapterId>+id
   }
 }

@@ -1,5 +1,6 @@
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { ReorderChapterDto } from '../chapters/dto/reorder-chapter.dto'
+import { convertToSentenceId } from '../utils/type-convertors'
 import { CreateSentenceDto } from './dto/create-sentence.dto'
 import { UpdateSentenceDto } from './dto/update-sentence.dto'
 import { SentencesService } from './sentences.service'
@@ -31,7 +32,7 @@ export class SentencesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    const sentenceId = this.sentencesService.convertToSentenceId(id)
+    const sentenceId = convertToSentenceId(id)
     return this.sentencesService.findOne(sentenceId)
   }
 
@@ -40,7 +41,7 @@ export class SentencesController {
     @Param('id') id: string,
     @Body() updateSentenceDto: UpdateSentenceDto,
   ) {
-    const sentenceId = this.sentencesService.convertToSentenceId(id)
+    const sentenceId = convertToSentenceId(id)
     return this.sentencesService.update(sentenceId, updateSentenceDto)
   }
 
@@ -49,13 +50,13 @@ export class SentencesController {
     @Param('id') id: string,
     @Body() reorderChapterDto: ReorderChapterDto,
   ) {
-    const sentenceId = this.sentencesService.convertToSentenceId(id)
+    const sentenceId = convertToSentenceId(id)
     return this.sentencesService.reorder(sentenceId, reorderChapterDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    const sentenceId = this.sentencesService.convertToSentenceId(id)
+    const sentenceId = convertToSentenceId(id)
     return this.sentencesService.remove(sentenceId)
   }
 }

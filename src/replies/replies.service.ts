@@ -28,8 +28,4 @@ export class RepliesService {
   remove(id: ReplyId) {
     return this.repository.delete({ id })
   }
-
-  convertToReplyId(id: number | string): ReplyId {
-    return <ReplyId>+id
-  }
 }

@@ -61,8 +61,4 @@ export class StoriesService {
       .addOrderBy('reply.id')
       .getOne()
   }
-
-  convertToStoryId(id: number | string): StoryId {
-    return <StoryId>+id
-  }
 }

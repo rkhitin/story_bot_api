@@ -12,6 +12,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common'
+import { convertToStoryId } from 'src/utils/type-convertors'
 
 @UseGuards(JwtAuthGuard)
 @Controller('stories')
@@ -30,19 +31,19 @@ export class StoriesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    const storyId = this.storiesService.convertToStoryId(id)
+    const storyId = convertToStoryId(id)
     return this.storiesService.findOne(storyId)
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStoryDto: UpdateStoryDto) {
-    const storyId = this.storiesService.convertToStoryId(id)
+    const storyId = convertToStoryId(id)
     return this.storiesService.update(storyId, updateStoryDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    const storyId = this.storiesService.convertToStoryId(id)
+    const storyId = convertToStoryId(id)
     return this.storiesService.remove(storyId)
   }
 }

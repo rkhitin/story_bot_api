@@ -62,8 +62,4 @@ export class SentencesService {
   remove(id: SentenceId) {
     return this.repository.delete({ id })
   }
-
-  convertToSentenceId(id: number | string): SentenceId {
-    return <SentenceId>+id
-  }
 }
