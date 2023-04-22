@@ -36,7 +36,7 @@ export class TelegramUpdate {
     const firstSentence = currentStory.chapters[0].sentences[0]
 
     const keyboardProps = this.telegramService.makeKeyboardProps(
-      firstSentence.replays,
+      firstSentence.replies,
       tUserId,
       firstSentence.id,
     )
@@ -55,7 +55,12 @@ export class TelegramUpdate {
   async on(@Ctx() ctx: Context) {
     const { username, id: telegramId } = ctx.from
 
-    const tUser = await this.tUserService.find(username, telegramId)
+    let tUser = await this.tUserService.find(username, telegramId)
+
+    if (!tUser) {
+      // TODO: Send some instruction to the user mb?
+      tUser = await this.tUserService.create({ username, telegramId })
+    }
 
     await this.sendNextSentence(ctx, tUser.id)
   }
@@ -63,7 +68,7 @@ export class TelegramUpdate {
   @Action(/action (.+)/)
   async action(@Ctx() ctx: Context & { match: string[] }) {
     const actionData = ctx.match[1]
-    const [replayId, tUserId, sentenceId] = actionData.split('-')
+    const [replyId, tUserId, sentenceId] = actionData.split('-')
 
     // const previousKeyboardProps = await this.telegramService.getKeyboardProps(
     //   Number(sentenceId),
@@ -72,7 +77,7 @@ export class TelegramUpdate {
     // console.log(previousKeyboardProps)
 
     // const answer = await this.answersService.create({
-    //   replayId: Number(replayId),
+    //   replyId: Number(replyId),
     //   tUserId: Number(tUserId),
     // })
 

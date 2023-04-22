@@ -6,8 +6,8 @@ import { AuthModule } from './auth/auth.module'
 import { ChaptersModule } from './chapters/chapters.module'
 import { Chapter } from './chapters/entities/chapter.entity'
 import { OrderManagerModule } from './order-manager/order-manager.module'
-import { Replay } from './replays/entities/replay.entity'
-import { ReplaysModule } from './replays/replays.module'
+import { Reply } from './replies/entities/reply.entity'
+import { RepliesModule } from './replies/replies.module'
 import { Sentence } from './sentences/entities/sentence.entity'
 import { SentencesModule } from './sentences/sentences.module'
 import { Story } from './stories/entities/story.entity'
@@ -36,7 +36,7 @@ import { TelegrafModule } from 'nestjs-telegraf'
         username: configService.get('DATABASE_USER'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [Replay, Sentence, Chapter, Story, User, TUser, Answer],
+        entities: [Reply, Sentence, Chapter, Story, User, TUser, Answer],
         synchronize: true,
         logging: false,
       }),
@@ -60,7 +60,7 @@ import { TelegrafModule } from 'nestjs-telegraf'
       }),
     }),
     StoriesModule,
-    ReplaysModule,
+    RepliesModule,
     ChaptersModule,
     SentencesModule,
     OrderManagerModule,

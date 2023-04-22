@@ -1,5 +1,5 @@
 import { Chapter } from '../../chapters/entities/chapter.entity'
-import { Replay } from '../../replays/entities/replay.entity'
+import { Reply } from '../../replies/entities/reply.entity'
 import {
   Column,
   Entity,
@@ -37,6 +37,6 @@ export class Sentence {
   })
   chapter: Chapter
 
-  @OneToMany(() => Replay, (replay) => replay.sentence)
-  replays: Replay[]
+  @OneToMany(() => Reply, (reply) => reply.sentence)
+  replies: Reply[]
 }

@@ -1,8 +1,8 @@
-import { Replay } from '../../src/replays/entities/replay.entity'
+import { Reply } from '../../src/replies/entities/reply.entity'
 import { setSeederFactory } from 'typeorm-extension'
 
-export default setSeederFactory(Replay, (faker) => {
-  const item = new Replay()
+export default setSeederFactory(Reply, (faker) => {
+  const item = new Reply()
 
   item.text = faker.lorem.sentence(2)
   item.hint = faker.lorem.sentence(6)

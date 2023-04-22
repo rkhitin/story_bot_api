@@ -1,4 +1,4 @@
-import { Replay } from '../replays/entities/replay.entity'
+import { Reply } from '../replies/entities/reply.entity'
 import { TUser, TUserId } from '../t-users/entities/t-user.entity'
 import { CreateAnswerDto } from './dto/create-answer.dto'
 import { Answer } from './entities/answer.entity'
@@ -15,7 +15,7 @@ export class AnswersService {
   create(createAnswerDto: CreateAnswerDto) {
     return this.repository.save({
       tUser: { id: createAnswerDto.tUserId },
-      replay: { id: createAnswerDto.replayId },
+      reply: { id: createAnswerDto.replyId },
     })
   }
 
@@ -34,8 +34,8 @@ export class AnswersService {
   async getUnansweredSentences(tUserId: TUserId) {
     return this.repository
       .createQueryBuilder('answer')
-      .leftJoinAndSelect('answer.replay', 'replay')
-      .leftJoinAndSelect('replay.sentence', 'sentence')
+      .leftJoinAndSelect('answer.reply', 'reply')
+      .leftJoinAndSelect('reply.sentence', 'sentence')
       .where('answer.tUserId = :tUserId', { tUserId })
       .printSql()
       .getMany()
@@ -44,9 +44,9 @@ export class AnswersService {
   // getAnswerQB(storyId: number, tUserId: TUserId) {
   //   return this.repository
   //     .createQueryBuilder('answer')
-  //     .select('replay.id')
-  //     .innerJoin('answer.replay', 'replay')
-  //     .innerJoin('replay.sentence', 'sentence')
+  //     .select('reply.id')
+  //     .innerJoin('answer.reply', 'reply')
+  //     .innerJoin('reply.sentence', 'sentence')
   //     .innerJoin('sentence.chapter', 'chapter')
   //     .innerJoin('chapter.story', 'story')
   //     .where('answer.tUserId = :tUserId', { tUserId })

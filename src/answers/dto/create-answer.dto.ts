@@ -7,5 +7,5 @@ export class CreateAnswerDto {
 
   @IsNotEmpty()
   @IsNumber()
-  replayId: number
+  replyId: number
 }

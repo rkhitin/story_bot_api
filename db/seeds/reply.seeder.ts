@@ -1,4 +1,4 @@
-import { Replay } from '../../src/replays/entities/replay.entity'
+import { Reply } from '../../src/replies/entities/reply.entity'
 import { Sentence } from '../../src/sentences/entities/sentence.entity'
 import { faker } from '@faker-js/faker'
 import { DataSource } from 'typeorm'
@@ -9,31 +9,31 @@ export default class SentenceSeeder implements Seeder {
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
   ): Promise<any> {
-    const repository = dataSource.getRepository(Replay)
+    const repository = dataSource.getRepository(Reply)
     const chapterRepository = dataSource.getRepository(Sentence)
 
     await repository.delete({})
 
-    const factory = await factoryManager.get(Replay)
+    const factory = await factoryManager.get(Reply)
     const sentences = await chapterRepository.find()
 
-    const replays: Replay[] = []
+    const replies: Reply[] = []
 
     for (const sentence of sentences) {
       const amount = faker.datatype.number({ min: 1, max: 4 })
 
       for (let i = 0; i < amount; i++) {
-        const replay = await factory.make({}, false)
+        const reply = await factory.make({}, false)
 
-        replay.sentence = sentence
-        replay.isActive = Math.random() > 0.3
+        reply.sentence = sentence
+        reply.isActive = Math.random() > 0.3
 
-        replays.push(replay)
+        replies.push(reply)
       }
     }
 
-    await repository.save(replays)
+    await repository.save(replies)
 
-    console.log('ReplaySeeder: done!')
+    console.log('ReplySeeder: done!')
   }
 }

@@ -1,4 +1,4 @@
-import { Replay } from '../../replays/entities/replay.entity'
+import { Reply } from '../../replies/entities/reply.entity'
 import { TUser } from '../../t-users/entities/t-user.entity'
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 
@@ -13,9 +13,9 @@ export class Answer {
   })
   tUser: TUser
 
-  @ManyToOne(() => Replay, (replay) => replay.answers, {
+  @ManyToOne(() => Reply, (reply) => reply.answers, {
     onDelete: 'CASCADE',
     nullable: false,
   })
-  replay: Replay
+  reply: Reply
 }

@@ -1,7 +1,6 @@
 # Should be done
 - Choose the correct chapter
 - Handle repeated replies
-- Rename all replays
 - Make all ids branded
 - Send message with delay
 - Mark the correct or incorrect answer
@@ -12,9 +11,10 @@
 - Collect feedback from users
 
 # Have been done
+- Rename all replies
 - Setting for marking an correct answer in reply
-- Create an answer after t-users replay
-- Create a command block for replays
+- Create an answer after t-users reply
+- Create a command block for replies
 - Start with preselected story
 - Send a sentences to the t-users after starting
 - Register t-users after start action in the bot
@@ -25,7 +25,7 @@
 - Create a user module
 - Create authorisation module
 - Setup the code repository
-- CRUD for a replay
+- CRUD for a reply
 - CRUD for a sentence
 - Reorder sentences in chapter
 - Reorder chapters in story

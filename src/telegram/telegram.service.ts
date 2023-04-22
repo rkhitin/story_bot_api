@@ -1,4 +1,4 @@
-import { Replay } from '../replays/entities/replay.entity'
+import { Reply } from '../replies/entities/reply.entity'
 import { TUserId } from '../t-users/entities/t-user.entity'
 import { InjectRedis } from '@liaoliaots/nestjs-redis'
 import { Injectable } from '@nestjs/common'
@@ -29,7 +29,7 @@ export class TelegramService {
   }
 
   public makeKeyboardProps(
-    replies: Replay[],
+    replies: Reply[],
     tUserId: TUserId,
     sentenceId: number,
   ): KeyboardProps {

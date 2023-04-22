@@ -43,17 +43,17 @@ export class StoriesService {
         'chapter.sentences',
         'sentence',
         'sentence.id NOT IN (SELECT sentenceId ' +
-          'FROM replay ' +
+          'FROM reply ' +
           'INNER JOIN answer ' +
-          'ON replay.id = answer.replayId ' +
+          'ON reply.id = answer.replyId ' +
           `WHERE answer.tUserId = ${tUserId})`,
       )
-      .leftJoinAndSelect('sentence.replays', 'replay')
-      .leftJoinAndSelect('replay.answers', 'answer')
+      .leftJoinAndSelect('sentence.replies', 'reply')
+      .leftJoinAndSelect('reply.answers', 'answer')
       .where('story.isActive = true')
       .andWhere('chapter.isActive = true')
       .andWhere('sentence.isActive = true')
-      .andWhere('replay.isActive = true')
+      .andWhere('reply.isActive = true')
       .orderBy('story.id')
       .addOrderBy('chapter.ordinalNumber')
       .addOrderBy('sentence.ordinalNumber')

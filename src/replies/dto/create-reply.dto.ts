@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
-export class CreateReplayDto {
+export class CreateReplyDto {
   @IsString()
   text: string
 

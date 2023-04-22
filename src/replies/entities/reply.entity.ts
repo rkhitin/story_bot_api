@@ -9,7 +9,7 @@ import {
 } from 'typeorm'
 
 @Entity()
-export class Replay {
+export class Reply {
   @PrimaryGeneratedColumn()
   id: number
 
@@ -22,12 +22,12 @@ export class Replay {
   @Column()
   hint: string
 
-  @ManyToOne(() => Sentence, (sentence) => sentence.replays, {
+  @ManyToOne(() => Sentence, (sentence) => sentence.replies, {
     onDelete: 'CASCADE',
     nullable: false,
   })
   sentence: Sentence
 
-  @OneToMany(() => Answer, (answer) => answer.replay)
+  @OneToMany(() => Answer, (answer) => answer.reply)
   answers: Answer[]
 }
