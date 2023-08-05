@@ -3,6 +3,7 @@ import { Reply } from '../../replies/entities/reply.entity'
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -37,7 +38,11 @@ export class Sentence {
     onDelete: 'CASCADE',
     nullable: false,
   })
+  @JoinColumn({ name: 'chapterId' })
   chapter: Chapter
+
+  @Column({ nullable: false })
+  chapterId: number
 
   @OneToMany(() => Reply, (reply) => reply.sentence)
   replies: Reply[]

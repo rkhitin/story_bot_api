@@ -1,5 +1,6 @@
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { ReorderChapterDto } from '../chapters/dto/reorder-chapter.dto'
+import { ChapterId } from '../chapters/entities/chapter.entity'
 import { convertToSentenceId } from '../utils/type-convertors'
 import { CreateSentenceDto } from './dto/create-sentence.dto'
 import { UpdateSentenceDto } from './dto/update-sentence.dto'
@@ -10,8 +11,10 @@ import {
   Delete,
   Get,
   Param,
+  ParseArrayPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common'
 
@@ -26,8 +29,11 @@ export class SentencesController {
   }
 
   @Get()
-  findAll() {
-    return this.sentencesService.findAll()
+  findAll(
+    @Query('chapterIds', new ParseArrayPipe({ items: Number, separator: ',' }))
+    chapterIds: ChapterId[],
+  ) {
+    return this.sentencesService.findAll(chapterIds)
   }
 
   @Get(':id')

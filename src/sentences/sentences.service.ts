@@ -1,12 +1,12 @@
 import { ReorderChapterDto } from '../chapters/dto/reorder-chapter.dto'
-import { Chapter } from '../chapters/entities/chapter.entity'
+import { Chapter, ChapterId } from '../chapters/entities/chapter.entity'
 import { OrderManagerService } from '../order-manager/order-manager.service'
 import { CreateSentenceDto } from './dto/create-sentence.dto'
 import { UpdateSentenceDto } from './dto/update-sentence.dto'
 import { Sentence, SentenceId } from './entities/sentence.entity'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { DataSource, Repository } from 'typeorm'
+import { DataSource, In, Repository } from 'typeorm'
 
 @Injectable()
 export class SentencesService {
@@ -38,8 +38,14 @@ export class SentencesService {
     return this.orderManagerService.reorder(currentSentence, targetSentence)
   }
 
-  findAll() {
-    return this.repository.find()
+  findAll(chapterIds: ChapterId[]) {
+    return this.repository.find({
+      where: {
+        chapter: {
+          id: In(chapterIds),
+        },
+      },
+    })
   }
 
   findOneWithReplies(id: SentenceId) {
